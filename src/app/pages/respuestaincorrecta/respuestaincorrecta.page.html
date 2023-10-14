@@ -5,9 +5,20 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">respuestaincorrecta</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <ion-card class="ion-text-center ion-padding-vertical">
+    <img src="../../../assets/icon/incorrecto.png" alt="">
+    <ion-card-content>
+      <ion-card-title *ngIf="usuario">
+      </ion-card-title>
+      <h1>Tu Respuesta es Incorrecta <br>
+      intentalo nuevamente</h1>
+    </ion-card-content>
+
+    <ion-button color="warning" (click)="volverAlInicio()"  shape="round">
+      Volver Al Inicio
+    </ion-button>
+  </ion-card>
+  
+  
 </ion-content>

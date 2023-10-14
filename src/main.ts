@@ -8,6 +8,7 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
+
 if (environment.production) {
   enableProdMode();
 }
