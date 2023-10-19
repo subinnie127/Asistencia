@@ -1,15 +1,14 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { Injectable} from '@angular/core';
 import { SQLiteService } from './sqlite.service';
-import { DbnameVersionService } from './dbname-version.service';
-import { Usuario } from '../model/Usuario';
+import { Usuario } from '../model/usuario';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { showAlert, showAlertDUOC, showAlertError } from '../model/Message';
+import { showAlert, showAlertDUOC, showAlertError } from '../tools/message-routines';
 
 @Injectable()
 export class DataBaseService {
 
-  private userUpgrades = [
+  userUpgrades = [
     {
       toVersion: 1,
       statements: [`
@@ -26,95 +25,85 @@ export class DataBaseService {
     }
   ]
 
-  public listaUsuarios: BehaviorSubject<Usuario[]> = new BehaviorSubject<Usuario[]>([]);
-  private nombreBaseDatos = 'basedatos';
-  private db!: SQLiteDBConnection;
-  private estaListoUsuario: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  nombreBD = 'basedatos';
+  db!: SQLiteDBConnection;
+  listaUsuarios: BehaviorSubject<Usuario[]> = new BehaviorSubject<Usuario[]>([]);
+  listaUsuariosFueActualizada: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  datosQR: BehaviorSubject<string> = new BehaviorSubject('');
 
-  constructor(private sqliteService: SQLiteService, private dbVerService: DbnameVersionService) { }
+  constructor(private sqliteService: SQLiteService) { }
 
   async inicializarBaseDeDatos() {
-    
+
     // Crear base de datos SQLite
-    await this.sqliteService.crearBaseDeDatos({
-      database: this.nombreBaseDatos,
-      upgrade: this.userUpgrades
-    });
+    await this.sqliteService.crearBaseDeDatos({database: this.nombreBD, upgrade: this.userUpgrades});
 
     // Abrir base de datos
-    try {
-      this.db = await this.sqliteService.abrirBaseDeDatos(
-        this.nombreBaseDatos,
-        false,
-        'no-encryption',
-        1,
-        false
-      );
-    } catch(err: any) {
-      showAlertError('inicializarBaseDeDatos', err);
-    };
+    this.db = await this.sqliteService.abrirBaseDeDatos(this.nombreBD, false, 'no-encryption', 1, false);
 
-    // Respaldar el nombre y versión de la base de datos
-    this.dbVerService.set(this.nombreBaseDatos, 1);
+    // Para crear usuarios de prueba descomenta la siguiente línea
+    await this.crearUsuariosDePrueba();
 
     // Cargar la lista de usuarios
     await this.leerUsuarios();
   }
 
-  usuariosFueronCargados() {
-    return this.estaListoUsuario.asObservable();
+  async crearUsuariosDePrueba() {
+    await this.guardarUsuario(Usuario.getUsuario('atorres@duocuc.cl', '1234', 'Ana', 'Torres', 'Nombre de mi mascota', 'gato', 'N'));
+    await this.guardarUsuario(Usuario.getUsuario('avalenzuela@duocuc.cl', 'qwer', 'Alberto', 'Valenzuela', 'Mi mejor amigo', 'juanito', 'N'));
+    await this.guardarUsuario(Usuario.getUsuario('cfuentes@duocuc.cl', 'asdf', 'Carla', 'Fuentes', 'Dónde nació mamá', 'valparaiso', 'N'));
   }
 
-  notificarUsuarios$(): Observable<Usuario[]> {
-    return this.listaUsuarios.asObservable();
+  // Create y Update del CRUD. La creación y actualización de un usuario
+  // se realizarán con el mismo método, ya que la instrucción "INSERT OR REPLACE"
+  // revisa la clave primaria y si el registro es nuevo entonces lo inserta,
+  // pero si el registro ya existe, entonces los actualiza.
+  
+  async guardarUsuario(usuario: Usuario) {
+    const sql = 'INSERT OR REPLACE INTO USUARIO (correo, password, nombre, apellido, ' +
+      'preguntaSecreta, respuestaSecreta, sesionActiva) VALUES (?,?,?,?,?,?,?);';
+    await this.db.run(sql, [usuario.correo, usuario.password, usuario.nombre, usuario.apellido, 
+      usuario.preguntaSecreta, usuario.respuestaSecreta, usuario.sesionActiva]);
+    await this.leerUsuarios();
   }
 
-  async cargarUsuarios() {
-    const users: Usuario[]= (await this.db.query('SELECT * FROM USUARIO;')).values as Usuario[];
-    this.listaUsuarios.next(users);
-  }
+  // Cada vez que se ejecute leerUsuario() la aplicación va a cargar los usuarios desde la base de datos,
+  // y por medio de la instrucción "this.listaUsuarios.next(usuarios);" le va a notificar a todos los programas
+  // que se subscribieron a la propiedad "listaUsuarios", que la tabla de usuarios se acaba de cargar. De esta
+  // forma los programas subscritos a la variable listaUsuarios van a forzar la actualización de sus páginas HTML.
 
-  async leerUsuario(correo: string) {
-    const users: Usuario[]= (await this.db.query(`SELECT * FROM USUARIO WHERE correo='${correo}';`)).values as Usuario[];
-    return users[0];
-  }
-
+  // ReadAll del CRUD. Si existen registros entonces convierte los registros en una lista de usuarios
+  // con la instrucción ".values as Usuario[];". Si la tabla no tiene registros.
   async leerUsuarios() {
-    await this.cargarUsuarios();
-    this.estaListoUsuario.next(true);
+    const usuarios: Usuario[]= (await this.db.query('SELECT * FROM USUARIO;')).values as Usuario[];
+    this.listaUsuarios.next(usuarios);
+    this.listaUsuariosFueActualizada.next(true);
   }
 
-  async crearUsuario(usuario: Usuario) {
-    try {
-      const sql = `INSERT INTO USUARIO (correo, password, nombre, apellido, preguntaSecreta, respuestaSecreta, sesionActiva) VALUES (?,?,?,?,?,?,?);`;
-      await this.db.run(sql, [
-        usuario.correo,
-        usuario.password,
-        usuario.nombre,
-        usuario.apellido,
-        usuario.preguntaSecreta,
-        usuario.respuestaSecreta,
-        usuario.sesionActiva
-      ]);
-      await this.leerUsuarios();
-    } catch(err) {
-      console.log(err);
-    }
+  // Read del CRUD
+  async leerUsuario(correo: string): Promise<Usuario | undefined> {
+    const usuarios: Usuario[]= (await this.db.query('SELECT * FROM USUARIO WHERE correo=?;', [correo])).values as Usuario[];
+    return usuarios[0];
   }
 
-  async actualizarUsuarioPorCorreo(correo: string, sesionActiva: string) {
-    const sql = `UPDATE USUARIO SET sesionActiva=${sesionActiva} WHERE correo='${correo}'`;
-    await this.db.run(sql);
+  // Delete del CRUD
+  async eliminarUsuarioUsandoCorreo(correo: string) {
+    const sql = 'DELETE FROM USUARIO WHERE correo=?';
+    await this.db.run(sql, [correo]);
     await this.leerUsuarios();
   }
 
-  async eliminarUsuarioPorCorreo(correo: string) {
-    const sql = `DELETE FROM USUARIO WHERE correo='${correo}'`;
-    await this.db.run(sql);
+  // Validar usuario
+  async validarUsuario(correo: string, password: string): Promise<Usuario | undefined> {
+    const usuarios: Usuario[]= (await this.db.query('SELECT * FROM USUARIO WHERE correo=? AND password=?;',
+      [correo, password])).values as Usuario[];
+    return usuarios[0];
+  }
+
+  // Actualizar sesión activa
+  async actualizarSesionActiva(correo: string, sesionActiva: string) {
+    const sql = 'UPDATE USUARIO SET sesionActiva=? WHERE correo=?';
+    await this.db.run(sql, [sesionActiva, correo]);
     await this.leerUsuarios();
   }
 }
-function err(reason: any): SQLiteDBConnection | PromiseLike<SQLiteDBConnection> {
-  throw new Error('Function not implemented.');
-}
-

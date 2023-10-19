@@ -20,11 +20,11 @@ export const routes: Routes = [
   },
   {
     path: 'respuestacorrecta',
-    loadComponent: () => import('./pages/respuestacorrecta/respuestacorrecta.page').then( m => m.RespuestacorrectaPage)
+    loadComponent: () => import('./pages/correcto/correcto.page').then( m => m.CorrectoPage)
   },
   {
     path: 'respuestaincorrecta',
-    loadComponent: () => import('./pages/respuestaincorrecta/respuestaincorrecta.page').then( m => m.RespuestaincorrectaPage)
+    loadComponent: () => import('./pages/incorrecto/incorrecto.page').then( m => m.IncorrectoPage)
   },
   {
     path: 'pregunta',

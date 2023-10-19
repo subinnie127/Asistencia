@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { Injectable } from '@angular/core';
 import { SQLiteService } from './sqlite.service';
 import { DataBaseService } from './data-base.service';
@@ -9,7 +10,8 @@ export class InitializeAppService {
 
   constructor(
     private sqliteService: SQLiteService,
-    private storageService: DataBaseService) { }
+    private storageService: DataBaseService,
+    private authService: AuthService) { }
 
   async inicializarAplicacion() {
     // Inicializar plugin de SQLite
@@ -26,6 +28,8 @@ export class InitializeAppService {
         if( this.sqliteService.platform === 'web') {
           await this.sqliteService.guardarNombreBaseDeDatos();
         }
+        // Inicializar servicio de autenticación
+        this.authService.inicializarAutenticacion();
         this.isAppInit = true;
       } catch (error) {
         console.log(`inicializarAplicacionError: ${error}`);
