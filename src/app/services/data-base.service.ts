@@ -1,3 +1,4 @@
+
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { Injectable} from '@angular/core';
 import { SQLiteService } from './sqlite.service';
@@ -106,4 +107,10 @@ export class DataBaseService {
     await this.db.run(sql, [sesionActiva, correo]);
     await this.leerUsuarios();
   }
+
+  async  CorreoExiste(correo: string): Promise<Usuario | undefined> {
+    const usuarios: Usuario[]= (await this.db.query('SELECT * FROM USUARIO WHERE correo=?;',
+      [correo])).values as Usuario[];
+    return usuarios[0];
+  }
 }
