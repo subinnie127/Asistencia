@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-ingreso',
   templateUrl: './ingreso.page.html',
@@ -13,7 +14,6 @@ import { Router } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class IngresoPage implements OnInit {
-
   correo = 'atorres@duocuc.cl';
   password = '1234';
 
@@ -24,6 +24,10 @@ export class IngresoPage implements OnInit {
 
   ingresar() {
     this.authService.login(this.correo, this.password);
+  }
+
+  goToRecuperarContra(){
+    this.router.navigate(['/correo']);
   }
 
 }
