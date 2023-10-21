@@ -35,7 +35,7 @@ export class CorreoPage implements OnInit {
         showToast(`El correo es: ${usuario.correo}`);
         this.router.navigate(['/pregunta']);
       } else {
-        this.router.navigate(['/incorrecto']);
+        showToast(`El correo no existe`)
       }
     });
   }

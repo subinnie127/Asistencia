@@ -1,3 +1,4 @@
+import { Usuario } from 'src/app/model/usuario';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,9 +14,9 @@ import { ToastController } from '@ionic/angular';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class PreguntaPage implements OnInit {
-  usuario: any;
-  public respuesta = '';
-  password = '';
+
+  usuario= new Usuario();
+  respuesta='';
 
 
   constructor(
@@ -46,6 +47,9 @@ export class PreguntaPage implements OnInit {
       position: 'top', // Posición del Toast (top, bottom, middle)
     });
     toast.present();
+  }
+  goToLogin(){
+    this.router.navigate(['/ingreso'])
   }
 
 }
