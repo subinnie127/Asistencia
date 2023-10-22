@@ -19,11 +19,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/correo/correo.page').then( m => m.CorreoPage)
   },
   {
-    path: 'respuestacorrecta',
+    path: 'correcto',
     loadComponent: () => import('./pages/correcto/correcto.page').then( m => m.CorrectoPage)
   },
   {
-    path: 'respuestaincorrecta',
+    path: 'incorrecto',
     loadComponent: () => import('./pages/incorrecto/incorrecto.page').then( m => m.IncorrectoPage)
   },
   {

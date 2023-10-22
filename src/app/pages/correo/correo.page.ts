@@ -33,7 +33,9 @@ export class CorreoPage implements OnInit {
     await this.bd.CorreoExiste(correo).then(async (usuario : Usuario | undefined) => {
       if (usuario){
         showToast(`El correo es: ${usuario.correo}`);
-        this.router.navigate(['/pregunta']);
+    
+        this.router.navigate(['/pregunta'], {queryParams: {pregunta: usuario.preguntaSecreta}});
+        console.log(usuario)
       } else {
         showToast(`El correo no existe`)
       }

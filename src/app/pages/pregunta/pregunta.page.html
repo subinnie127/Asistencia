@@ -16,13 +16,13 @@
         <br>
         <h1>Paso 2: Responda la pregunta secreta</h1>
       </ion-card-title>
-      <h2>PREGUNTA SECRETA: <br> {{ usuario.preguntaSecreta }}</h2>
+      <h2>{{ preguntaSecreta }}</h2>
 
       <ion-card-content>
         <ion-item>
           <ion-label position="floating">Ingrese respuesta:</ion-label>
           <!-- Usamos ngModel para indicarle al input con que propiedad del controlador va a trabajar -->
-          <ion-input type="text" [(ngModel)]="respuesta"></ion-input>
+          <ion-input type="text" [(ngModel)]="respuestaSecreta"></ion-input>
         </ion-item>
         
         <ion-row>
@@ -31,7 +31,7 @@
               Para usar un método de la clase controladora, hay que escribir el evento del control entre paréntesis y luego
               indicar cual es el método a ejecutar; en este caso se trata de ingresar()
             -->
-            <ion-button expand="full" (click)="mostrarDatosPersona()">Recuperar Contraseña</ion-button>
+            <ion-button expand="full" (click)="verificarRespuesta(respuestaSecreta)">Recuperar Contraseña</ion-button>
           </ion-col>
         </ion-row>
       </ion-card-content>
