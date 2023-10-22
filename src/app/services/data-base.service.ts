@@ -113,4 +113,15 @@ export class DataBaseService {
       [correo])).values as Usuario[];
     return usuarios[0];
   }
+  async respuestaExiste(respuestaSecreta: string): Promise<Usuario| undefined>{
+    const usuarios: Usuario[]=(await this.db.query('SELECT * FROM USUARIO WHERE respuestaSecreta=?;',
+    [respuestaSecreta])).values as Usuario[];
+    return usuarios[0];
+  }
+
+  async verificarPregunta(preguntaSecreta: string): Promise<Usuario | undefined> {
+    const usuarios: Usuario[]=(await this.db.query('SELECT * FROM USUARIO WHERE preguntaSecreta=?;',
+    [preguntaSecreta])).values as Usuario[];
+    return usuarios[0];
+  }
 }
