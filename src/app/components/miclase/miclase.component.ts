@@ -4,6 +4,7 @@ import { Asistencia } from 'src/app/model/asistencia';
 import { IonicModule, ViewWillEnter } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-miclase',
@@ -16,7 +17,7 @@ export class MiclaseComponent  implements ViewWillEnter {
 
   asistencia= new Asistencia();
 
-  constructor(private bd: DataBaseService) { 
+  constructor(private authService: AuthService, private bd: DataBaseService) { 
     this.bd.datosQR.subscribe((datosQR) => {
       this.asistencia = new Asistencia().obtenerAsistenciaDesdeQR(datosQR);
     })
@@ -25,5 +26,10 @@ export class MiclaseComponent  implements ViewWillEnter {
   ionViewWillEnter() {
     this.asistencia = new Asistencia();
   }
+
+  cerrarsesion(){
+    this.authService.logout();
+  }
+
 
 }

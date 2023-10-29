@@ -4,7 +4,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Usuario } from 'src/app/model/Usuario';
-import { APIClientService, Publicacion } from 'src/app/services/apiclient.service';
+import { Publicacion } from 'src/app/model/publicacion';
+import { APIClientService} from 'src/app/services/apiclient.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { showAlertDUOC, showAlertError } from 'src/app/tools/message-routines';
 
@@ -114,5 +115,9 @@ export class ForoComponent  implements OnInit {
       next: (publicacion) => this.mensajePublicacion('eliminada', pub.id),
       error: (error) => showAlertError('No fue posible eliminar la publicación.', error)
     });
+  }
+
+  cerrarsesion(){
+    this.authService.logout();
   }
 }
