@@ -12,12 +12,12 @@
     </h2>
   </div>
 
-  <ion-button *ngIf="!escaneando" (click)="comenzarEscaneoQR()">
+  <ion-button shape='block' *ngIf="!escaneando" (click)="comenzarEscaneoQR()">
     <ion-icon slot="start" name="videocam-outline"></ion-icon>
     Comenzar Escaneo de QR
   </ion-button>
 
-  <ion-button *ngIf="escaneando && plataforma === 'web'" (click)="detenerEscaneoQR()">
+  <ion-button shape='block' *ngIf="escaneando && plataforma === 'web'" (click)="detenerEscaneoQR()">
     <ion-icon slot="start" name="stop-circle-outline"></ion-icon>
     Detener escaneo de QR
   </ion-button>
@@ -25,8 +25,9 @@
   <video #video [hidden]="!escaneando" width="100%"></video>
   <canvas #canvas hidden></canvas>
 
+  <br>
   <div class="centrar-boton">
-     <ion-button (click)="cerrarsesion()">
+     <ion-button shape='block' (click)="cerrarsesion()">
        Cerrar sesión
      </ion-button>
   </div>
