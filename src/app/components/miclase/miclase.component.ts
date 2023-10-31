@@ -27,9 +27,5 @@ export class MiclaseComponent  implements ViewWillEnter {
     this.asistencia = new Asistencia();
   }
 
-  cerrarsesion(){
-    this.authService.logout();
-  }
-
 
 }

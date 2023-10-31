@@ -178,8 +178,4 @@ export class QrComponent implements OnInit {
     }
   }
 
-  cerrarsesion(){
-    this.authService.logout();
-  }
-
 }

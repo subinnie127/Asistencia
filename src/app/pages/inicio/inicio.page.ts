@@ -6,6 +6,8 @@ import { QrComponent } from 'src/app/components/qr/qr.component';
 import { MiclaseComponent } from 'src/app/components/miclase/miclase.component';
 import { MisdatosComponent } from 'src/app/components/misdatos/misdatos.component';
 import { ForoComponent } from 'src/app/components/foro/foro.component';
+import { AuthService } from 'src/app/services/auth.service';
+
 
 @Component({
   selector: 'app-inicio',
@@ -24,7 +26,7 @@ import { ForoComponent } from 'src/app/components/foro/foro.component';
 export class InicioPage implements OnInit {
   componente_actual = 'qr';
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
@@ -32,4 +34,7 @@ export class InicioPage implements OnInit {
   this.componente_actual= event.detail.value
 
  }
+ cerrarsesion(){
+  this.authService.logout();
+}
 }

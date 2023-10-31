@@ -116,7 +116,4 @@ export class ForoComponent  implements OnInit {
     });
   }
 
-  cerrarsesion(){
-    this.authService.logout();
-  }
 }

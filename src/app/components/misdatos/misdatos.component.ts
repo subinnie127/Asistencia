@@ -53,8 +53,4 @@ export class MisdatosComponent  implements OnInit {
     this.authService.setUsuarioAutenticado(this.usuario);
     showToast('Sus datos fueron actualizados');
   }
-  cerrarsesion(){
-    this.authService.logout();
-  }
-
 }
