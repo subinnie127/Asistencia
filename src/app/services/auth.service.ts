@@ -1,8 +1,8 @@
+import { Usuario } from './../model/Usuario';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { showToast } from 'src/app/tools/message-routines';
-import { Usuario } from '../model/Usuario';
 import { Storage } from '@ionic/storage-angular';
 import { DataBaseService } from './data-base.service';
 
@@ -12,11 +12,15 @@ export class AuthService {
 
   keyUsuario = 'USUARIO_AUTENTICADO';
   usuarioAutenticado = new BehaviorSubject<Usuario | null>(null);
+  primerIniciarSesion = new BehaviorSubject<boolean>(false);
 
-  constructor(private router: Router, private bd: DataBaseService, private storage: Storage) { }
+  constructor(private router: Router, private bd: DataBaseService, private storage: Storage) {
+    this.inicializarAutenticacion();
+   }
 
-  inicializarAutenticacion() {
-    this.storage.create();
+
+  async inicializarAutenticacion(){
+    await this.storage.create();
   }
 
   async isAuthenticated(): Promise<boolean> {
@@ -24,30 +28,28 @@ export class AuthService {
       return usuario !== null;
     });
   }
-
-  async login(correo: string, password: string) {
-    await this.storage.get(this.keyUsuario).then(async (usuarioAutenticado) => {
-      if (usuarioAutenticado) {
-        this.bd.actualizarSesionActiva(correo, 'S');
-        this.storage.set(this.keyUsuario, usuarioAutenticado);
+  async login(correo: string, password: string){
+    await this.storage.get(this.keyUsuario).then( async (usuarioAutenticado)=>{
+      if(usuarioAutenticado){
         this.usuarioAutenticado.next(usuarioAutenticado);
+        this.primerIniciarSesion.next(false);
         this.router.navigate(['inicio']);
       } else {
-        await this.bd.validarUsuario(correo, password).then(async (usuario: Usuario | undefined) => {
-          if (usuario) {
-            showToast(`¡Bienvenido(a) ${usuario.nombre} ${usuario.apellido}!`);
-            this.bd.actualizarSesionActiva(correo, 'S');
-            this.storage.set(this.keyUsuario, usuario);
-            this.usuarioAutenticado.next(usuario);
-            this.router.navigate(['inicio']);
-          } else {
+        await this.bd.validarUsuario(correo, password).then(async (usuario: Usuario | undefined )=>{
+          if(usuario){
+          showToast(`¡Bienvenido(a) ${usuario.nombre} ${usuario.apellido}!`);
+          this.guardarUsuarioAutenticado(usuario);
+          this.primerIniciarSesion.next(true);
+          this.router.navigate(['inicio']);
+          } else{
             showToast(`El correo o la password son incorrectos`);
             this.router.navigate(['ingreso']);
           }
-        });
+        })
       }
-    });
+  })
   }
+
 
   async logout() {
     this.leerUsuarioAutenticado().then((usuario) => {
@@ -73,5 +75,13 @@ export class AuthService {
     this.storage.set(this.keyUsuario, usuario);
     this.usuarioAutenticado.next(usuario);
   }
+  eliminarUsuarioAutenticado(usuario: Usuario){
+    this.storage.remove(this.keyUsuario);
+  }
+  guardarUsuarioAutenticado(usuario: Usuario){
+    this.storage.set(this.keyUsuario, usuario);
+    this.usuarioAutenticado.next(usuario);
+  }
+ 
 
 }
