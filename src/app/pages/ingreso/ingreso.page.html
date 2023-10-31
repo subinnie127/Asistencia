@@ -1,0 +1,46 @@
+<ion-header >
+  <ion-toolbar >
+    <img alt="Duoc Uc" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Logo_DuocUC.svg/2560px-Logo_DuocUC.svg.png" />
+    <br>
+    <ion-title  class="ion-text-center color-texto">
+      <div>
+        Sistema de asistencia Duoc UC
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content id="fondo" >
+    <div class="ion-padding-vertical">
+    <ion-card class="ion-text-center ion-padding-vertical">
+
+      <ion-card-title class="ion-text-center">
+        <ion-label>
+          <h1>¡Bienvenido!</h1>
+        </ion-label>
+      </ion-card-title>
+
+      <ion-card-content>
+       <ion-item>
+        <ion-input [(ngModel)]="correo" type="text" label="Correo" labelPlacement="floating"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input [(ngModel)]="password" type="password" label="Contraseña" labelPlacement="floating"></ion-input>
+      </ion-item>
+        <ion-row>
+          <ion-col size="12">          
+            <ion-button color = "warning" shape="block" (click)="ingresar()">Ingresar</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">          
+          
+          </ion-col>
+        </ion-row>
+
+      </ion-card-content>
+      <ion-button (click)="goToRecuperarContra()" expand="block" fill="clear" shape="round">
+        Recuperar Contraseña
+      </ion-button>
+    </ion-card>
+  </div>  
+</ion-content>
