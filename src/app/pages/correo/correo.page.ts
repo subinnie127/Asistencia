@@ -38,6 +38,7 @@ export class CorreoPage implements OnInit {
         console.log(usuario)
       } else {
         showToast(`El correo no existe`)
+        this.router.navigate(['/incorrecto'])
       }
     });
   }
