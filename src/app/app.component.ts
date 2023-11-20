@@ -9,5 +9,6 @@ import { IonicModule } from '@ionic/angular';
   imports: [IonicModule],
 })
 export class AppComponent {
+  [x: string]: any;
   constructor() {}
 }
