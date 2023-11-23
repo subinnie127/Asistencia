@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { RecuperarContraPage } from './recuperar-contra.page';
+import { CorreoPage } from './correo.page';
 
-describe('RecuperarContraPage', () => {
-  let component: RecuperarContraPage;
-  let fixture: ComponentFixture<RecuperarContraPage>;
+describe('CorreoPage', () => {
+  let component: CorreoPage;
+  let fixture: ComponentFixture<CorreoPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecuperarContraPage ],
+      declarations: [ CorreoPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(RecuperarContraPage);
+    fixture = TestBed.createComponent(CorreoPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
