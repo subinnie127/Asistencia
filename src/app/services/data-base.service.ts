@@ -53,6 +53,7 @@ export class DataBaseService {
     await this.guardarUsuario(Usuario.getUsuario('atorres@duocuc.cl', '1234', 'Ana', 'Torres', '¿Nombre de tu mascota?', 'gato', 'N'));
     await this.guardarUsuario(Usuario.getUsuario('avalenzuela@duocuc.cl', 'qwer', 'Alberto', 'Valenzuela', '¿Tu mejor amigo?', 'juanito', 'N'));
     await this.guardarUsuario(Usuario.getUsuario('cfuentes@duocuc.cl', 'asdf', 'Carla', 'Fuentes', '¿Dónde nació tu mamá?', 'valparaiso', 'N'));
+    await this.guardarUsuario(Usuario.getUsuario('admin@duocuc.cl', 'admi', 'admin', 'pass', '¿Tu musica favorita?', 'rock', 'N'));
   }
 
   // Create y Update del CRUD. La creación y actualización de un usuario
