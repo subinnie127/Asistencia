@@ -6,6 +6,7 @@ import { Usuario } from 'src/app/model/Usuario';
 import { Router } from '@angular/router';
 import { DataBaseService } from 'src/app/services/data-base.service';
 import { log, showAlertDUOC, showToast, showAlertError } from 'src/app/tools/message-routines';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -19,29 +20,41 @@ export class AdminComponent  implements OnInit {
   Usuarios = new Array <Usuario>;
   cantidad = 0;
 
-  constructor(private router: Router, private db: DataBaseService) { }
+  constructor(private router: Router, private db: DataBaseService, private authService: AuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getUsuarios();
+  }
 
   async getUsuarios(){
     try{
       await this.db.leerUsuarios();
-    log('DeleteUserPage.getUsuarios', `Cantidad de usuarios: ${this.cantidad}`);
-    const usu = new Usuario();
-    usu.setUsuario(
-      usu.nombre,
-      usu.apellido,
-      usu.correo,
-      usu.password,
-      usu.preguntaSecreta,
-      usu.respuestaSecreta,
-      '',
-      );
-      this.Usuarios.push(usu)
 
-    } catch(err) {
+      this.Usuarios = await this.db.listaUsuarios.getValue();
+      this.cantidad = this.Usuarios.length;
+    log('AdminComponent.getUsuarios', `Cantidad de usuarios: ${this.cantidad}`);
+    
+  } catch(err) {
       showAlertDUOC('admincomponent.getusuarios');
     }
   }
+
+  async eliminarUsuario(correo: string) {
+    try {
+      // Llama al método eliminarUsuarioUsandoCorreo del servicio DataBaseService
+      await this.db.eliminarUsuarioUsandoCorreo(correo);
   
+      // Vuelve a cargar la lista de usuarios después de la eliminación
+      await this.getUsuarios();
+  
+      showToast('Usuario eliminado correctamente');
+    
+    } catch (err) {
+    showAlertDUOC('admincomponent.eliminarUsuario');
+    }
+  }
+
+  cerrarsesion(){
+    this.authService.logout();
+  }
 }

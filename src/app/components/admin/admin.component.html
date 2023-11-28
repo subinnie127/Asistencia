@@ -51,6 +51,14 @@
             
           </ion-card-content>
         
-          <ion-button (click)="eliminarUsuario(usu)">
+          <ion-button (click)="eliminarUsuario(usu.correo)">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
+
+  <ion-footer>
+    <ion-toolbar>
+      <ion-button (click)="cerrarsesion()" expand="block" fill="clear" shape="round">
+      Cerrar sesión
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>

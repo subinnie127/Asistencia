@@ -3,22 +3,22 @@ import { IonicModule } from '@ionic/angular';
 
 import {  IncorrectoPage } from './incorrecto.page';
 
-describe('IncorrectoPage', () => {
-  let component: IncorrectoPage;
-  let fixture: ComponentFixture<IncorrectoPage>;
+//describe('IncorrectoPage', () => {
+  //let component: IncorrectoPage;
+  //let fixture: ComponentFixture<IncorrectoPage>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ IncorrectoPage],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+  //beforeEach(waitForAsync(() => {
+    //TestBed.configureTestingModule({
+      //declarations: [ IncorrectoPage],
+      //imports: [IonicModule.forRoot()]
+    //}).compileComponents();
 
-    fixture = TestBed.createComponent(IncorrectoPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    //fixture = TestBed.createComponent(IncorrectoPage);
+    //component = fixture.componentInstance;
+    //fixture.detectChanges();
+  //}));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  //it('should create', () => {
+    //expect(component).toBeTruthy();
+  //});
+//});

@@ -11,6 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { APIClientService } from 'src/app/services/apiclient.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpEvent, HttpEventType, HttpHandler } from '@angular/common/http';
+import { SQLiteService } from 'src/app/services/sqlite.service';
 
 function suma(x: number, y: number) {
   return x + y;
@@ -26,7 +27,7 @@ describe('Probar página de ingreso', () => {
     TestBed.configureTestingModule({ 
       imports: [IngresoPage, IonicModule, FormsModule, CommonModule, HttpClientTestingModule],
       providers: [DataBaseService, AuthService, Storage, APIClientService
-        , RouterTestingModule, HttpTestingController, HttpClient, HttpHandler],
+        , RouterTestingModule, HttpTestingController, HttpClient, HttpHandler, SQLiteService],
     }).compileComponents(); // Compila el template y el css del componente
 
     // Crea una instancia del componente
