@@ -16,7 +16,7 @@
         Existe 1 usuario en la base de datos
       </span>
       <span class="cantidad-usuarios" *ngIf="cantidad > 1">
-        Existen {{cantidad}} usuario en la base de datos
+        Existen {{cantidad}} usuarios en la base de datos
       </span>
     </ion-card-header>
 
@@ -54,11 +54,3 @@
           <ion-button (click)="eliminarUsuario(usu.correo)">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
-
-  <ion-footer>
-    <ion-toolbar>
-      <ion-button (click)="cerrarsesion()" expand="block" fill="clear" shape="round">
-      Cerrar sesión
-      </ion-button>
-    </ion-toolbar>
-  </ion-footer>

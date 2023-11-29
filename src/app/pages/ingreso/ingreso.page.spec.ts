@@ -12,6 +12,9 @@ import { APIClientService } from 'src/app/services/apiclient.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpEvent, HttpEventType, HttpHandler } from '@angular/common/http';
 import { SQLiteService } from 'src/app/services/sqlite.service';
+import { Usuario } from 'src/app/model/Usuario';
+import { Component } from '@angular/core';
+import { InicioPage } from '../inicio/inicio.page';
 
 function suma(x: number, y: number) {
   return x + y;
@@ -43,10 +46,6 @@ describe('Probar página de ingreso', () => {
     expect(component).toBeTruthy(); 
   });
 
-    it('La función suma(10, 5) debería devolver 15', () => {
-    expect(suma(10, 5)).toEqual(15);
-  });
-
   it('Debería asignar correo y contraseña a nombre de Ana Torres', () => {
     expect(component.correo).toBe('atorres@duocuc.cl');
     expect(component.password).toBe('1234');
@@ -64,7 +63,46 @@ describe('Probar página de ingreso', () => {
     // Verifica que el método login del servicio AuthService haya sido llamado con los parámetros 'atorres@duocuc' y '1234'
     expect(authService.login).toHaveBeenCalledWith('atorres@duocuc.cl', '1234');
   });
-   
+
+  it('Debería poder iniciar sesión con Carla fuentes', async () => {
+    // Inyecta el servicio AuthService
+    const authService = TestBed.inject(AuthService); 
+    // Espía el método login del servicio AuthService para verificar que se llame con los parámetros 'atorres@duocuc' y '1234'
+    spyOn(authService, 'login');
+    // Ejecuta el método ingresar del componente
+    component.correo = 'cfuentes@duocuc.cl';
+    component.password = 'asdf';
+    await component.ingresar(); 
+    // Verifica que el método login del servicio AuthService haya sido llamado con los parámetros 'atorres@duocuc' y '1234'
+    expect(authService.login).toHaveBeenCalledWith('cfuentes@duocuc.cl', 'asdf');
+  });
+
+  it('Debería poder iniciar sesión con Alberto Valenzuela', async () => {
+    // Inyecta el servicio AuthService
+    const authService = TestBed.inject(AuthService); 
+    // Espía el método login del servicio AuthService para verificar que se llame con los parámetros 'atorres@duocuc' y '1234'
+    spyOn(authService, 'login');
+    // Ejecuta el método ingresar del componente
+    component.correo = 'avalenzuela@duocuc.cl';
+    component.password = 'qwer';
+    await component.ingresar(); 
+    // Verifica que el método login del servicio AuthService haya sido llamado con los parámetros 'atorres@duocuc' y '1234'
+    expect(authService.login).toHaveBeenCalledWith('avalenzuela@duocuc.cl', 'qwer');
+  });
+
+  it('Debería poder iniciar sesión con Admin Pass', async () => {
+    // Inyecta el servicio AuthService
+    const authService = TestBed.inject(AuthService); 
+    // Espía el método login del servicio AuthService para verificar que se llame con los parámetros 'atorres@duocuc' y '1234'
+    spyOn(authService, 'login');
+    // Ejecuta el método ingresar del componente
+    component.correo = 'admin@duocuc.cl';
+    component.password = 'admi';
+    await component.ingresar(); 
+    // Verifica que el método login del servicio AuthService haya sido llamado con los parámetros 'atorres@duocuc' y '1234'
+    expect(authService.login).toHaveBeenCalledWith('admin@duocuc.cl', 'admi');
+  });
+
 });
 
 //import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
