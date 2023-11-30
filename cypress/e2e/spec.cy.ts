@@ -3,22 +3,22 @@ describe('Verificar mi aplicación', () => {
   const numero = Math.floor(Math.random() * 1000000) + 1;
 
   it('Verificar inicio de sesión con credenciales incorrectas', () => {
-    cy.visit('/').then(() => {
-      cy.contains('Asistencia DUOC - Ingreso');
+    cy.visit('http://localhost:8100/ingreso').then(() => {
+      cy.contains('Sistema de asistencia Duoc UC ');
       cy.get('#correo').invoke('val', '');
       cy.get('#correo').type('correo-inexistente@duocuc.cl');
       cy.get('#password').invoke('val', '');
       cy.get('#password').type('1234');
       cy.contains('Ingresar').click();
       cy.intercept('/inicio').as('route').then(() => {
-        cy.contains('Asistencia DUOC - Ingreso');
+        cy.contains('Sistema de asistencia Duoc UC');
       });
     });
   })
 
   it('Verificar inicio de sesión con credenciales correctas', () => {
     cy.visit('http://localhost:8100/ingreso').then(() => {
-      cy.contains('Asistencia DUOC - Ingreso');
+      cy.contains('Sistema de asistencia Duoc UC');
       cy.get('#correo').invoke('val', '');
       cy.get('#correo').type('atorres@duocuc.cl');
       cy.get('#password').invoke('val', '');
@@ -33,7 +33,7 @@ describe('Verificar mi aplicación', () => {
 
   it('Verificar publicación en foro', () => {
     cy.visit('http://localhost:8100/ingreso').then(() => {
-      cy.contains('Asistencia DUOC - Ingreso');
+      cy.contains('Sistema de asistencia Duoc UC');
       cy.get('#correo').invoke('val', '');
       cy.get('#correo').type('atorres@duocuc.cl');
       cy.get('#password').invoke('val', '');
@@ -56,7 +56,7 @@ describe('Verificar mi aplicación', () => {
 
     it(`Verificar eliminación en foro de la última publicación con el título que contiene ${numero}`, () => {
     cy.visit('http://localhost:8100/ingreso').then(() => {
-      cy.contains('Asistencia DUOC - Ingreso');
+      cy.contains('Sistema de asistencia Duoc UC');
       cy.get('#correo').invoke('val', '');
       cy.get('#correo').type('atorres@duocuc.cl');
       cy.get('#password').invoke('val', '');
@@ -65,11 +65,31 @@ describe('Verificar mi aplicación', () => {
       cy.intercept('/inicio').as('route').then(() => {
         cy.get('#saludo').contains('¡Bienvenido(a) Ana Torres!');
         cy.get('[ng-reflect-value="foro"]').click();
-        cy.contains('Eliminar').click();
+        cy.contains('eliminar').click();
         cy.wait(3000);
         cy.contains('Aceptar').click();
         cy.wait(3000);
         cy.contains(`Título de prueba ${numero}`).should('not.exist');
+        cy.contains('Cerrar sesión').click();
+      });
+    });
+  })
+
+  it('Actualizar datos de Ana Torres actualizar apellido a Maria', () => {
+    cy.visit('http://localhost:8100/ingreso').then(() => {
+      cy.contains('Sistema de asistencia Duoc UC');
+      cy.get('#correo').invoke('val', '');
+      cy.get('#correo').type('atorres@duocuc.cl');
+      cy.get('#password').invoke('val', '');
+      cy.get('#password').type('1234');
+      cy.contains('Ingresar').click();
+      cy.intercept('/inicio').as('route').then(() => {
+        cy.get('#saludo').contains('¡Bienvenido(a) Ana Torres!');
+        cy.get('[ng-reflect-value="misdatos"]').click();
+        cy.get('#apellido').invoke('val','');
+        cy.get('#apellido').type('Maria');
+        cy.contains('Actualizar').click();
+        cy.wait(5000);
         cy.contains('Cerrar sesión').click();
       });
     });
