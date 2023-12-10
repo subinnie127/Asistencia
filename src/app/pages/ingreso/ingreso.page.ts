@@ -33,6 +33,10 @@ export class IngresoPage implements OnInit {
     this.router.navigate(['/correo']);
   }
 
+  goToRegistro(){
+    this.router.navigate(['/registrarme']);
+  }
+
   public ngAfterViewInit(): void {
     const animation = this.AnimationController
       .create()
